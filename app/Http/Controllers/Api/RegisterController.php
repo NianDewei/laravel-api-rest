@@ -3,14 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
+    private readonly string $basePath ;
+
+
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->basePath = config('app.url');
+    }
+
     public function index()
     {
         //
@@ -19,17 +29,22 @@ class RegisterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-        $request->validate([
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|string|email|max:255|unique:users',
-            'password'  => 'required|string|min:8|confirmed'
-        ]);
+        $request->validated();
 
-        $user = User::create($request->all());
+        $user       = User::create($request->all());
+        $path       = "$this->basePath/v1/users/$user->id";
+        $user->path = $path;
 
-        return response()->json($user, 201);
+        $header = [
+            'Location'     => $path,
+            'Content-Type' => 'application/vnd.api+json'
+        ];
+
+        $data = new UserResource($user);
+
+        return response()->json($data, 201, $header);
     }
 
     /**
