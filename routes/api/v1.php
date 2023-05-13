@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// !controllers
+use App\Http\Controllers\Api\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,14 +16,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('/', function () {
-    return response()->json(['data'=> 'Hello World'], 200);
-});
-
-Route::get('/demo', function () {
-    return response()->json(['data'=> 'point demo :)'], 200);
-});
+Route::post('register', [RegisterController::class, 'store'])->name('api.v1.register');
