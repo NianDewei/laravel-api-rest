@@ -4,8 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
     use HasFactory;
+
+    //! many-to-many relationship
+    public function posts(){
+        return $this->BelongsToMany(Post::class);
+    }
 }
