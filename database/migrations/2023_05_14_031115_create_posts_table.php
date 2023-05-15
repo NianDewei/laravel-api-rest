@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('name',50);
-            $table->string('slug',50);
+            $table->string('slug',50)->unique();
             $table->text('extract');
             $table->longText('body');
             $table->enum('status',[Post::BORRADOR,Post::PUBLICADO])->default(Post::BORRADOR);
